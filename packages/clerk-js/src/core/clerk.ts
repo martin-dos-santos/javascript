@@ -332,6 +332,7 @@ export class Clerk implements ClerkInterface {
   };
 
   public openGoogleOneTap = (props?: GoogleOneTapProps): void => {
+    // TODO: add telemetry
     this.assertComponentsReady(this.#componentControls);
     void this.#componentControls
       .ensureMounted({ preloadHint: 'GoogleOneTap' })
@@ -485,6 +486,35 @@ export class Clerk implements ClerkInterface {
   };
 
   public unmountSignIn = (node: HTMLDivElement): void => {
+    this.assertComponentsReady(this.#componentControls);
+    void this.#componentControls.ensureMounted().then(controls =>
+      controls.unmountComponent({
+        node,
+      }),
+    );
+  };
+
+  public mountUserVerification = (node: HTMLDivElement, props?: SignInProps): void => {
+    this.assertComponentsReady(this.#componentControls);
+    if (noUserExists(this)) {
+      if (this.#instanceType === 'development') {
+        throw new ClerkRuntimeError(warnings.cannotOpenUserProfile, {
+          code: 'cannot_render_user_missing',
+        });
+      }
+      return;
+    }
+    void this.#componentControls.ensureMounted({ preloadHint: 'UserVerification' }).then(controls =>
+      controls.mountComponent({
+        name: 'UserVerification',
+        appearanceKey: 'userVerification',
+        node,
+        props,
+      }),
+    );
+  };
+
+  public unmountUserVerification = (node: HTMLDivElement): void => {
     this.assertComponentsReady(this.#componentControls);
     void this.#componentControls.ensureMounted().then(controls =>
       controls.unmountComponent({
@@ -847,6 +877,7 @@ export class Clerk implements ClerkInterface {
 
     return this.#authService.decorateUrlWithDevBrowserToken(toURL).href;
   }
+
   public buildSignInUrl(options?: SignInRedirectOptions): string {
     return this.#buildUrl(
       'signInUrl',
