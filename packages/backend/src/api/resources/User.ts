@@ -35,6 +35,7 @@ export class User {
     readonly samlAccounts: SamlAccount[] = [],
     readonly lastActiveAt: number | null,
     readonly createOrganizationEnabled: boolean,
+    readonly createOrganizationsLimit: number | null = null,
   ) {}
 
   static fromJSON(data: UserJSON): User {
@@ -67,6 +68,7 @@ export class User {
       (data.saml_accounts || []).map((x: SamlAccountJSON) => SamlAccount.fromJSON(x)),
       data.last_active_at,
       data.create_organization_enabled,
+      data.create_organizations_limit,
     );
   }
 

@@ -95,6 +95,7 @@ type UpdateUserParams = {
   externalId?: string;
   createdAt?: Date;
   createOrganizationEnabled?: boolean;
+  createOrganizationsLimit?: number | null;
 } & UserMetadataParams &
   (UserPasswordHashingParams | object);
 
