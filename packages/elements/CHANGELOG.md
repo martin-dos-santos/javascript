@@ -1,5 +1,11 @@
 # @clerk/elements
 
+## 0.10.8
+
+### Patch Changes
+
+- Fixes issue where the incorrect sign in first factor strategy was being returned during sign in. ([#3828](https://github.com/clerk/javascript/pull/3828)) by [@alexcarpenter](https://github.com/alexcarpenter)
+
 ## 0.10.7
 
 ### Patch Changes
